@@ -17,17 +17,7 @@ app.use(express.static("public"));
 
 app.get("/api/warehouses", async (_req, res) => {
   try {
-    const warehouses = await knex("warehouses").select(
-      "id",
-      "warehouse_name",
-      "address",
-      "city",
-      "country",
-      "contact_name",
-      "contact_position",
-      "contact_phone",
-      "contact_email"
-    );
+    const warehouses = await knex("warehouses");
     res.status(200).json(warehouses);
   } catch (err) {
     console.log(err);
@@ -39,17 +29,6 @@ app.get("/api/warehouses/:id", async (req, res) => {
   try {
     const warehouse = await knex("warehouses")
       .where({ id: req.params.id })
-      .select(
-        "id",
-        "warehouse_name",
-        "address",
-        "city",
-        "country",
-        "contact_name",
-        "contact_position",
-        "contact_phone",
-        "contact_email"
-      )
       .first();
     if (!warehouse) {
       return res
