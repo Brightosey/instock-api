@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-router.get("/api/warehouses", async (_req, res) => {
+app.get("/api/warehouses", async (_req, res) => {
   try {
     const warehouses = await knex("warehouses").select(
       "id",
@@ -30,12 +30,38 @@ router.get("/api/warehouses", async (_req, res) => {
     );
     res.status(200).json(warehouses);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ message: "Error getting warehouses" });
   }
 });
 
-app.use(router);
+app.get("/api/warehouses/:id", async (req, res) => {
+  try {
+    const warehouse = await knex("warehouses")
+      .where({ id: req.params.id })
+      .select(
+        "id",
+        "warehouse_name",
+        "address",
+        "city",
+        "country",
+        "contact_name",
+        "contact_position",
+        "contact_phone",
+        "contact_email"
+      )
+      .first();
+    if (!warehouse) {
+      return res
+        .status(404)
+        .json({ message: `Warehouse with id ${req.params.id} not found` });
+    }
+    res.status(200).json(warehouse);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error getting warehouse" });
+  }
+});
 
 app.get("/", (_req, res) =>
   res.send(`Welcome to the InStock API by Team Witty Willows!`)
