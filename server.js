@@ -15,6 +15,28 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+router.get("/api/warehouses", async (_req, res) => {
+  try {
+    const warehouses = await knex("warehouses").select(
+      "id",
+      "warehouse_name",
+      "address",
+      "city",
+      "country",
+      "contact_name",
+      "contact_position",
+      "contact_phone",
+      "contact_email"
+    );
+    res.status(200).json(warehouses);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error getting warehouses" });
+  }
+});
+
+app.use(router);
+
 app.get("/", (_req, res) =>
   res.send(`Welcome to the InStock API by Team Witty Willows!`)
 );
