@@ -46,6 +46,26 @@ app.get("/api/warehouses/:id", async (req, res) => {
 	}
 });
 
+app.get("/api/inventories", async (req, res) => {
+	try {
+		const inventories = await knex("inventories")
+			.join("warehouses", "warehouses.id", "inventories.warehouse_id")
+			.select(
+				"inventories.id",
+				"warehouses.warehouse_name",
+				"inventories.item_name",
+				"inventories.description",
+				"inventories.category",
+				"inventories.status",
+				"inventories.quantity"
+			);
+		res.status(200).json(inventories);
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ message: "Error getting inventories" });
+	}
+});
+
 app.get("/", (_req, res) =>
 	res.send(`Welcome to the InStock API by Team Witty Willows!`)
 );
