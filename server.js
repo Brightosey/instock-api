@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 import initKnex from "knex";
 import configuration from "./knexfile.js";
+import warehouseRoutes from "./routes/warehouseRoute.js";
 
 const knex = initKnex(configuration);
 
@@ -14,6 +15,9 @@ const router = express.Router();
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
+
+// Mount the warehouse routes under "/api/warehouses"
+app.use("/api/warehouses", warehouseRoutes);
 
 app.get("/api/warehouses", async (_req, res) => {
 	try {
