@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 import initKnex from "knex";
 import configuration from "./knexfile.js";
+import warehouseRoutes from "./routes/warehouseRoute.js";
 
 const knex = initKnex(configuration);
 
@@ -15,8 +16,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+// Mount the warehouse routes under "/api/warehouses"
+app.use("/api/warehouses", warehouseRoutes);
+
 app.get("/api/warehouses", async (_req, res) => {
-<<<<<<< HEAD
 	try {
 		const warehouses = await knex("warehouses");
 		res.status(200).json(warehouses);
@@ -45,57 +48,6 @@ app.get("/api/warehouses/:id", async (req, res) => {
 
 app.get("/", (_req, res) =>
 	res.send(`Welcome to the InStock API by Team Witty Willows!`)
-=======
-  try {
-    const warehouses = await knex("warehouses").select(
-      "id",
-      "warehouse_name",
-      "address",
-      "city",
-      "country",
-      "contact_name",
-      "contact_position",
-      "contact_phone",
-      "contact_email"
-    );
-    res.status(200).json(warehouses);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Error getting warehouses" });
-  }
-});
-
-app.get("/api/warehouses/:id", async (req, res) => {
-  try {
-    const warehouse = await knex("warehouses")
-      .where({ id: req.params.id })
-      .select(
-        "id",
-        "warehouse_name",
-        "address",
-        "city",
-        "country",
-        "contact_name",
-        "contact_position",
-        "contact_phone",
-        "contact_email"
-      )
-      .first();
-    if (!warehouse) {
-      return res
-        .status(404)
-        .json({ message: `Warehouse with id ${req.params.id} not found` });
-    }
-    res.status(200).json(warehouse);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Error getting warehouse" });
-  }
-});
-
-app.get("/", (_req, res) =>
-  res.send(`Welcome to the InStock API by Team Witty Willows!`)
->>>>>>> 4b4ed088e3c9e5768a0c50d427251ef1859b19c5
 );
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
