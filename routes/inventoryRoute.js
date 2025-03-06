@@ -1,5 +1,5 @@
 import express from "express";
-import { check, validationResult } from "express-validator"; //npm install express-validator
+import { check, validationResult } from "express-validator"; // npm install express-validator
 import initKnex from "knex";
 import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
