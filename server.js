@@ -4,6 +4,7 @@ import cors from "cors";
 import initKnex from "knex";
 import configuration from "./knexfile.js";
 import warehouseRoutes from "./routes/warehouseRoute.js";
+import inventoryRoute from "./routes/inventoryRoute.js";
 
 const knex = initKnex(configuration);
 
@@ -18,6 +19,7 @@ app.use(express.static("public"));
 
 // Mount the warehouse routes under "/api/warehouses"
 app.use("/api/warehouses", warehouseRoutes);
+app.use("/api/inventories", inventoryRoute);
 
 app.get("/api/warehouses", async (_req, res) => {
   try {

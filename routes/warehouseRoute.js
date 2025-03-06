@@ -36,7 +36,7 @@ router.get("/:id/inventories", async (req, res) => {
 });
 
 // DELETE route to delete warehouse and related inventory items
-router.delete("/warehouses/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -45,8 +45,6 @@ router.delete("/warehouses/:id", async (req, res) => {
     if (!warehouse) {
       return res.status(404).json({message: "No record found with the Id provided"});
     }
-
-    await knex("inventory").where("warehouse_id", id).del();
 
     await knex("warehouses").where("id", id).del();
 
