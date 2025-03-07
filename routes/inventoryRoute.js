@@ -30,6 +30,7 @@ router.get("/:id", async (req, res) => {
       .join("warehouses", "warehouses.id", "inventories.warehouse_id")
       .select(
         "inventories.id",
+        "inventories.warehouse_id",
         "warehouses.warehouse_name",
         "inventories.item_name",
         "inventories.description",
@@ -64,6 +65,7 @@ router.put(
     check("quantity").isInt().withMessage("Quantity must be an integer"),
   ],
   async (req, res) => {
+    console.log(req.body);
     // Handle validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -230,4 +232,27 @@ router.put(
     }
   }
 );
+
+// DELETE /api/inventories/:id - Delete a single inventory item
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Check if the inventory item exists
+    const inventory = await knex("inventories").where({ id }).first();
+    if (!inventory) {
+      return res
+        .status(404)
+        .json({ message: `Inventory item with id ${id} not found.` });
+    }
+    // Delete the inventory item
+    await knex("inventories").where({ id }).del();
+    // Respond with a success message (204 No Content is typical for DELETE)
+    return res.status(204).send();
+  } catch (error) {
+    console.error("Error deleting inventory:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error, please try again later." });
+  }
+});
 export default router;
