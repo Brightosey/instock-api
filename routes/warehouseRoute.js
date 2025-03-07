@@ -92,7 +92,7 @@ const isValidEmail = (email) => emailRegex.test(email);
 const isValidPhone = (phone) => phoneRegex.test(phone);
 
 //POST a New Warehouse --Vivian
-router.post("/add", async (req, res) => {
+router.post("/", async (req, res) => {
 	const {
 		warehouse_name,
 		address,
@@ -106,14 +106,14 @@ router.post("/add", async (req, res) => {
 	try {
 		//validate if empty data received.
 		if (
-			!warehouse_name.trim() ||
-			!address.trim() ||
-			!city.trim() ||
-			!country.trim() ||
-			!contact_name.trim() ||
-			!contact_position.trim() ||
-			!contact_phone.trim() ||
-			!contact_email.trim()
+			!warehouse_name?.trim() ||
+			!address?.trim() ||
+			!city?.trim() ||
+			!country?.trim() ||
+			!contact_name?.trim() ||
+			!contact_position?.trim() ||
+			!contact_phone?.trim() ||
+			!contact_email?.trim()
 		)
 			return res.status(400).json({ error: "Missing required information" });
 
@@ -133,12 +133,63 @@ router.post("/add", async (req, res) => {
 		const warehouse = await knex("warehouses")
 			.where({ id: warehouseId })
 			.first();
-		res.status(201).json(warehouse);
+		return res.status(201).json(warehouse);
 	} catch (err) {
 		return res.status(400).json({ error: err.message });
 	}
 });
 
 //PUT/EDIT an existing Warehouse --Vivian
+router.put("/:warehouseId", async (req, res) => {
+	const { warehouseId } = req.params;
+
+	const {
+		warehouse_name,
+		address,
+		city,
+		country,
+		contact_name,
+		contact_position,
+		contact_phone,
+		contact_email,
+	} = req.body;
+	try {
+		//verify if empty fields.
+		if (
+			!warehouse_name?.trim() ||
+			!address?.trim() ||
+			!city?.trim() ||
+			!country?.trim() ||
+			!contact_name?.trim() ||
+			!contact_position?.trim() ||
+			!contact_phone?.trim() ||
+			!contact_email?.trim()
+		)
+			return res.status(400).json({ error: "Missing required information" });
+
+		//validate email
+		if (!isValidEmail(contact_email))
+			return res.status(400).json({ error: "Invalid email format" });
+		//validate phone
+		if (!isValidPhone(contact_phone))
+			return res.status(400).json({ error: "Invalid phone number format" });
+
+		//update db with id
+		const updatedRow = await knex("warehouses")
+			.where({ id: warehouseId })
+			.update(req.body);
+		//query the revised warehouse object using id.
+		if (!updatedRow)
+			return res
+				.status(404)
+				.json({ error: "Warehouse id not found. Update failed" });
+		const updatedWarehouse = await knex("warehouses")
+			.where({ id: warehouseId })
+			.first();
+		return res.status(200).json(updatedWarehouse);
+	} catch (err) {
+		return res.status(400).json({ error: err.message });
+	}
+});
 
 export default router;
