@@ -63,6 +63,7 @@ router.put(
     check("category").notEmpty().withMessage("Category is required"),
     check("status").notEmpty().withMessage("Status is required"),
     check("quantity").isInt().withMessage("Quantity must be an integer"),
+    check("warehouse_name").notEmpty().withMessage("Warehouse name required"),
   ],
   async (req, res) => {
     console.log(req.body);
@@ -181,10 +182,12 @@ router.put(
     check("quantity")
       .isInt({ min: 0 })
       .withMessage("quantity must be a number and greater than or equal to 0"),
+    check("warehouse_name").notEmpty().withMessage("Warehouse name required"),
   ],
   async (req, res) => {
     // Validate request body
     const errors = validationResult(req);
+    console.log(validationResult);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
