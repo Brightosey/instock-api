@@ -131,8 +131,9 @@ router.post(
 		// }
 		const { warehouse_id, item_name, description, category, status, quantity } =
 			req.body;
+		console.log(req.body);
 		try {
-			const warehouse = await db("warehouses")
+			const warehouse = await knex("warehouses")
 				.where({ id: warehouse_id })
 				.first();
 			if (!warehouse) {
@@ -140,7 +141,7 @@ router.post(
 					message: `Warehouse with ID ${warehouse_id} does not exist.`,
 				});
 			}
-			const [newInventory] = await db("inventories").insert(
+			const [newInventory] = await knex("inventories").insert(
 				{
 					warehouse_id,
 					item_name,
