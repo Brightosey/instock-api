@@ -4,12 +4,13 @@ import "dotenv/config";
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 export default {
-  client: "mysql2",
+  client: "pg",
   connection: {
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    charset: "utf8",
+    port: 5432,
+    ssl: true,
   },
 };
