@@ -4,6 +4,7 @@ import initKnex from "knex";
 import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
 const router = express.Router();
+
 router.get("/", async (req, res) => {
   try {
     const inventories = await knex("inventories")
@@ -122,9 +123,7 @@ router.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
+	
     const { warehouse_id, item_name, description, category, status, quantity } =
       req.body;
     console.log(req.body);
