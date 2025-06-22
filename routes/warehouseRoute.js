@@ -91,7 +91,7 @@ const phoneRegex = /^\+?(\d{1,3})?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
 const isValidEmail = (email) => emailRegex.test(email);
 const isValidPhone = (phone) => phoneRegex.test(phone);
 
-//POST a New Warehouse --Vivian
+//POST a New Warehouse
 router.post("/", async (req, res) => {
   const {
     warehouse_name,
