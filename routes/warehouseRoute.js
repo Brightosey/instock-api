@@ -117,10 +117,10 @@ router.post("/", async (req, res) => {
     )
       return res.status(400).json({ error: "Missing required information" });
 
-    //validate email
+    
     if (!isValidEmail(contact_email))
       return res.status(400).json({ error: "Invalid email format" });
-    //validate phone
+   
     if (!isValidPhone(contact_phone))
       return res.status(400).json({ error: "Invalid phone number format" });
 
