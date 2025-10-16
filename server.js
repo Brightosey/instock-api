@@ -25,4 +25,4 @@ app.get("/", (_req, res) =>
   res.send(`Welcome to the InStock API by Team Witty Willows!`)
 );
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server is running on this port ${PORT}`));
